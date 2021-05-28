@@ -1,6 +1,7 @@
-#include<stdio.h>
-#include<conio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <conio.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 int width = 20, height = 20, gameOver;
 int x,y,fruitX,fruitY,score,flag;
@@ -68,13 +69,13 @@ void input()
             case 'a':
                 flag = 1;
                 break;
-            case 's':
+            case 'd':
                 flag = 2;
                 break;
             case 'w':
                 flag = 3;
                 break;
-            case 'z':
+            case 's':
                 flag = 4;
                 break;
             case 'x':
@@ -102,6 +103,28 @@ void logic()
         default:
             break;
     }
+    if(x < 0 || x>width || y < 0 || y>height)
+    {
+        gameOver = 1;
+
+    }
+    if(x == fruitX && y == fruitY)
+    {
+        generate_againX1:
+        fruitX = rand()%20;
+        if(fruitX == 0)
+        {
+            goto generate_againX1;
+        }
+        generate_againY1:
+        fruitY = rand()%20;
+        if(fruitY == 0)
+        {
+            goto generate_againY1;
+        }
+        score+=10;
+
+    }
 
 }
 
@@ -114,11 +137,19 @@ int main()
 {
     game_name();
     setup();
-    while(1)
+    while(!gameOver)
     {
         draw();
         input();
         logic();
+        for(int i = 0; i < 10000; i++)
+        {
+            for(int j = 0; j < 10000; j++)
+            {
+            }
+            
+        }
+        
 
     }
     return 0;
