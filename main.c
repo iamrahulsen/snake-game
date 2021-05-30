@@ -5,6 +5,8 @@
 
 int width = 20, height = 20, gameOver;
 int x,y,fruitX,fruitY,score,flag;
+int tailX[100], tailY[100];
+int countTail = 0;
 
 void setup()
 {
@@ -28,7 +30,7 @@ void setup()
 }
 void draw()
 {
-    int i,j;
+    int i,j,k;
     system("cls");
     for(i = 0;i<width;i++)
     {
@@ -50,11 +52,21 @@ void draw()
                 }
                 else
                 {
-                    printf(" ");
+                    int ch = 0;
+                    for(k = 0; k<countTail;k++)
+                    {
+                        if(i == tailX[k] && j==tailY[k])
+                        {
+                            printf("o");
+                            ch = 1;
+                        }
+                    }
+                    if(ch == 0)
+                    {
+                        printf(" ");
+                    }
                 }
-                
             }
-            
         }
     printf("\n");
     }
@@ -86,6 +98,23 @@ void input()
 }
 void logic()
 {
+    int i;
+    int prevX = tailX[0];
+    int prevY = tailY[0];
+    int prev2X, prev2Y;
+    tailX[0] = x;
+    tailY[0] = y;
+
+    for(i = 1; i < countTail; i++)
+    {
+        prev2X = tailX[i];
+        prev2Y = tailY[i];
+        tailX[i] = prevX;
+        tailY[i] = prevY;
+        prevX = prev2X;
+        prevY = prev2Y;
+    }
+    
     switch (flag)
     {
         case 1:
@@ -103,11 +132,8 @@ void logic()
         default:
             break;
     }
-    if(x < 0 || x>width || y < 0 || y>height)
-    {
-        gameOver = 1;
-
-    }
+    
+    
     if(x == fruitX && y == fruitY)
     {
         generate_againX1:
@@ -123,6 +149,7 @@ void logic()
             goto generate_againY1;
         }
         score+=10;
+        countTail++;
 
     }
 
@@ -142,15 +169,14 @@ int main()
         draw();
         input();
         logic();
-        for(int i = 0; i < 10000; i++)
+        for(int i = 0; i < 6000; i++)
         {
-            for(int j = 0; j < 10000; j++)
+            for(int j = 0; j < 6000; j++)
             {
             }
-            
         }
-        
-
     }
+    printf("\n\n Game Over!");
+    getch();
     return 0;
 }
