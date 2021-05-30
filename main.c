@@ -8,6 +8,7 @@ int x,y,fruitX,fruitY,score,flag;
 int tailX[100], tailY[100];
 int countTail = 0;
 
+// setting up the random food postion and snake
 void setup()
 {
     gameOver = 0;
@@ -28,17 +29,20 @@ void setup()
     }
     score = 0;
 }
+
+// drawing the game grid
 void draw()
 {
     int i,j,k;
     system("cls");
+    printf("**The snake game**\n\n");
     for(i = 0;i<width;i++)
     {
     for(j=0;j<height;j++)
         {
             if(i==0 || i==height-1 || j==0 || j==width-1)
             {
-                printf("*");
+                printf("#");
             }
             else
             {
@@ -48,11 +52,11 @@ void draw()
                 }
                 else if (i==fruitX && j==fruitY)
                 {
-                    printf("F");
+                    printf("*");
                 }
                 else
                 {
-                    int ch = 0;
+                    int ch = 0; // increasing the tail
                     for(k = 0; k<countTail;k++)
                     {
                         if(i == tailX[k] && j==tailY[k])
@@ -70,8 +74,12 @@ void draw()
         }
     printf("\n");
     }
+    printf("Score: %d\n\n", score); // displaying live score
+    printf("INSTRUCTION\n");
+    printf("Press \nw for up\na for left\nd for right\ns for down\nand \nPress x to exit: ");
 }
 
+// taking input from the user
 void input()
 {
     if(kbhit())
@@ -96,6 +104,8 @@ void input()
         }
     }
 }
+
+// collison and movement of the snake inside the grid
 void logic()
 {
     int i;
@@ -132,7 +142,18 @@ void logic()
         default:
             break;
     }
-    
+    if(x <= 0 || x >= width || y <= 0 || y >= height)
+    {
+        gameOver = 1;
+
+    }
+    for(i = 0; i<countTail; i++) {
+        if ( x == tailX[i] && y==tailY[i]) {
+            gameOver = 1;
+            
+        }
+        
+    }    
     
     if(x == fruitX && y == fruitY)
     {
@@ -148,21 +169,16 @@ void logic()
         {
             goto generate_againY1;
         }
-        score+=10;
-        countTail++;
+        score+=10; // calculation of the score
+        countTail++; // increasing the tail
 
     }
 
 }
 
-void game_name()
-{
-    printf("**The snake game**\n\n");
-}
-
+// driver program
 int main()
 {
-    game_name();
     setup();
     while(!gameOver)
     {
@@ -176,7 +192,11 @@ int main()
             }
         }
     }
-    printf("\n\n Game Over!");
+    printf("\n\n Game Over!\n");
+    printf("Your final Score: %d\n", score);
     getch();
     return 0;
 }
+
+
+
